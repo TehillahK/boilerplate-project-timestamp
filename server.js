@@ -29,14 +29,20 @@ app.get("/api/:input",function (req,res,next){
   if(!input.includes("-")){
     const val = parseInt(input)
     const date = new Date(val)
-    res.json({"unix":val,"utc":date.toUTCString()})
+    if(!isNaN(date))
+      res.json({"unix":val,"utc":date.toUTCString()})
+    else
+      res.json({"error":date.toString()})
   }
   next()
 },function (req,res) {
   const dateParam = req.params.input;
   const date = new Date(dateParam)
   const unix = Date.parse(dateParam)
-  res.json({"unix":unix,"utc":date.toString()})
+  if(!(isNaN(unix)))
+    res.json({"unix":unix,"utc":date.toString()})
+  else
+    res.json({"error":date.toString()})
 })
 /*
 app.get("/api/:date",function (req,res) {
